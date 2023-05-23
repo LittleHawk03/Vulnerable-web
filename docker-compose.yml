@@ -1,0 +1,45 @@
+version: "3"  
+
+
+# SHOUT OUT TO QUANG BA AT17B CHO Ý TUONG VE CHIEC DOCKER COMPOSE NAY
+services:
+    vulw:
+        build: ./image_php-apache
+        ports:
+            - "9991:80"
+        volumes:
+            - ./vulw:/var/www/html/
+        links:
+            - ds
+        depends_on:
+            - ds
+    ds:
+        image: mysql
+        container_name: ds
+        ports:
+            - "3306:3306"
+        command: --default-authentication-plugin=mysql_native_password
+        environment: 
+            MARIADB_ROOT_PASSWORD: '123456a@'
+            MYSQL_DATABASE: 1ccb8097d0e9ce9f154608be60224c7c
+            MYSQL_USER: vulw
+            MYSQL_ROOT_PASSWORD: '123456a@'
+            MYSQL_PASSWORD: '123456a@'
+        volumes:
+            - vul_db:/var/lib/mysql
+    phpmyadmin1:
+        container_name: phpmyadmin1
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "8082:80"
+        environment:
+            MYSQL_USER: vulw
+            MYSQL_ROOT_PASSWORD: '123456a@'
+            MYSQL_PASSWORD: '123456a@'
+            PMA_HOST: ds
+            PMA_USER: root
+            PMA_PASSWORD: '123456a@'
+volumes:
+    vul_db:
+networks:
+    default:
